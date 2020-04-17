@@ -4,7 +4,7 @@ const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
 var engine, world;
-var shooter, slingshot; 
+var slingshot; 
 
 var gameState = "onSling";
 
@@ -26,20 +26,21 @@ function setup() {
   box3 = new Box(700,240,70,70);
   box4 = new Box(920,240,70,70);
   
-  log3 =  new Log(810,180,300, PI/2);
+  log3 =  new Log(810,180,300, PI/2); 
 
   box5 = new Box(810,160,70,70);
   log4 = new Log(760,120,150, PI/7);
   log5 = new Log(870,120,150, -PI/7);
 
-  shooter = new shooter(200,50);
-  slingshot = new SlingShot(shooter.body,{x:200, y:50});
+  bird = new Bird(200,50);
+  slingshot = new SlingShot(bird.body,{x:200, y:50});
 }
 
 function draw() {
-  background("black");  
+  background("white");  
   Engine.update(engine);
     //strokeWeight(4);
+
     box1.display();
     box2.display();
     ground.display();
@@ -55,24 +56,26 @@ function draw() {
     log4.display();
     log5.display();
 
-    shooter.display();
+    bird.display();
     slingshot.display();   
   drawSprites();
 }
 function mouseDragged(){
-  if (gameState!=="launched"){
-      Matter.Body.setPosition(shooter.body, {x: mouseX , y: mouseY});
-  }
+  // if(gamestate!=="launched"){
+    Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
+   //}
 }
 
 
 function mouseReleased(){
-  slingshot.fly();
-  gameState = "launched";
+   slingshot.fly();
+   gamestate="launched";
 }
 
 function keyPressed(){
-  if(keyCode === 32){
-     // slingshot.attach(shooter.body);
-  }
-} 
+   if(keyCode === 32){
+       bird.path=[];
+       Matter.Body.setPosition(bird.body,{x:200, y:50})
+    slingshot.attach(bird.body);
+   }
+}    
